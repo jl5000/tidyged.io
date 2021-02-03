@@ -21,5 +21,6 @@ Imports:
     tibble
 Suggests: 
     testthat (>= 3.0.0),
-    roxytest
+    roxytest,
+    tidyged
 Config/testthat/edition: 3
