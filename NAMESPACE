@@ -2,5 +2,6 @@
 
 export("%>%")
 export(read_gedcom)
+export(set_class_to_tidyged)
 export(write_gedcom)
 importFrom(magrittr,"%>%")
