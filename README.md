@@ -36,6 +36,9 @@ be imported using the `read_gedcom()` function:
 
 ``` r
 library(tidyged.io)
+#> When importing existing GEDCOM files, you should ensure that they are error free.
+#> This package assumes imported GEDCOM files are valid and very few validation checks are carried out.
+#> Several GEDCOM validators are available, including an online validator at http://ged-inline.elasticbeanstalk.com/
 
 read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
   print(n = Inf)
