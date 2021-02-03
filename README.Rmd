@@ -1,0 +1,63 @@
+---
+output:  github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# tidyged.io
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/jl5000/tidyged.io/workflows/R-CMD-check/badge.svg)](https://github.com/jl5000/tidyged.io/actions)
+[![](https://codecov.io/gh/jl5000/tidyged.io/branch/main/graph/badge.svg)](https://codecov.io/gh/jl5000/tidyged.io)
+[![CodeFactor](https://www.codefactor.io/repository/github/jl5000/tidyged.io/badge)](https://www.codefactor.io/repository/github/jl5000/tidyged.io)
+[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+<!-- badges: end -->
+
+Import and export family tree GEDCOM files to and from tidy dataframes. 
+
+The package is part of the `gedcompendium` ecosystem of packages. This ecosystem enables the handling of `tidyged` objects (tibble representations of GEDCOM files), and the main package of this ecosystem is [`tidyged`](https://jl5000.github.io/tidyged/).
+
+## Installation
+
+You can install the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jl5000/tidyged.io")
+```
+
+## Importing existing files
+
+The easiest way to create a `tidyged` object is to import an existing GEDCOM file. The package comes with some sample GEDCOM files, which can be imported using the `read_gedcom()` function:
+
+```{r}
+library(tidyged.io)
+
+read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
+  print(n = Inf)
+```
+
+
+Many other GEDCOM readers will carry out extensive checks on every line of a GEDCOM file ensuring all tags and values are legal, and the grammar is used correctly. The `tidyged.io` package carries out very few checks, relying on the user to check their files beforehand (as described when loading the package). The few checks that are carried out include:
+
+* Ensuring the file has a valid Byte Order Mark which is consistent with that described in the file;
+* Ensuring no lines exceed the character limit;
+* Ensuring the header is correctly formed;
+* Ensuring there is only one header, trailer, and submitter record defined.
+
+In the future, the `gedcompendium` ecosystem may include a dedicated validation package, but this is currently a low priority.
+
+If you want to export your file as a valid GEDCOM file, you can use the `write_gedcom()` function.
+
+## References
+
+* [The GEDCOM 5.5.5 Specification](https://www.gedcom.org/gedcom.html)

@@ -1,0 +1,25 @@
+Package: tidyged.io
+Title: Import and Export GEDCOM Files
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Jamie",
+           family = "Lendrum",
+           role = c("aut", "cre"),
+           email = "jalendrum@gmail.com")
+Description: Import and export family tree GEDCOM files to and from tidy dataframes.
+URL: https://github.com/jl5000/tidyged.io
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "roxytest::testthat_roclet"))
+RoxygenNote: 7.1.1
+Imports: 
+    dplyr,
+    magrittr,
+    tidyr,
+    stringr,
+    tibble
+Suggests: 
+    testthat (>= 3.0.0),
+    roxytest
+Config/testthat/edition: 3
