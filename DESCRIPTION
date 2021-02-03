@@ -23,4 +23,5 @@ Suggests:
     testthat (>= 3.0.0),
     roxytest,
     tidyged
+Remotes: jl5000/tidyged
 Config/testthat/edition: 3
