@@ -23,7 +23,7 @@ write_gedcom <- function(gedcom, filepath) {
   
   gedcom %>%
     update_header_with_filename(filename = basename(filepath)) %>% 
-    dplyr::mutate(value = dplyr::if_else(stringr::str_detect(value, xref_pattern()),
+    dplyr::mutate(value = dplyr::if_else(stringr::str_detect(value, "^@[a-zA-Z0-9]{1,20}@$"),
                                          value,
                                          stringr::str_replace_all(value, "@", "@@"))) %>% 
     split_gedcom_values(char_limit = .pkgenv$gedcom_phys_value_limit) %>% 
