@@ -55,7 +55,7 @@ update_header_with_filename <- function(gedcom, filename) {
     
     tibble::add_row(gedcom, 
                     tibble::tibble(level = 1, record = "HD", tag = "FILE", value = filename),
-                    .before = find_insertion_point(gedcom, "HD", 0, "HEAD"))
+                    .after = which(gedcom$record == "HD" & gedcom$tag == "SUBM"))
     
   } else if(nrow(dplyr::filter(gedcom, record == "HD", tag == "FILE")) == 1) {
     
