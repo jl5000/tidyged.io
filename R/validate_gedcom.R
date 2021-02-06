@@ -19,7 +19,6 @@ validate_gedcom <- function(gedcom, expected_encoding) {
   if(sum(gedcom$level == 0 & gedcom$tag == "TRLR") != 1) stop("GEDCOM has no single trailer")
   if(sum(gedcom$level == 0 & gedcom$tag == "SUBM")  > 1) stop("File has more than one submitter record")
   if(sum(gedcom$record == "HD" & gedcom$tag == "SOUR") != 1) warning("GEDCOM header has no single system ID")
-  if(sum(gedcom$record == "HD" & gedcom$tag == "SUBM") != 1) warning("GEDCOM header has no single submitter")
   if(sum(gedcom$record == "HD" & gedcom$tag == "GEDC") != 1) warning("GEDCOM header is lacking file information")
   
 }

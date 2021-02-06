@@ -23,6 +23,9 @@
 #' expect_snapshot_value(
 #'     read_gedcom(system.file("extdata", "555SAMPLE16LE.GED", package = "tidyged.io")), 
 #'     "json2")
+#' expect_snapshot_value(
+#'     read_gedcom(system.file("extdata", "MINIMAL555.GED", package = "tidyged.io")), 
+#'     "json2")
 read_gedcom <- function(filepath) {
   
   if(tolower(stringr::str_sub(filepath, -4, -1)) != ".ged")
@@ -38,7 +41,7 @@ read_gedcom <- function(filepath) {
     check_line_lengths(.pkgenv$gedcom_line_length_limit) %>%
     tibble::tibble(value = .) %>%
     tidyr::extract(value, into = c("level", "record", "tag", "value"), 
-                   regex = "^\\w*(\\d) (@.+@)? ?(\\w{3,5}) ?(.*)$") %>%
+                   regex = "^(\\d) (@.+@)? ?(\\w{3,5}) ?(.*)$") %>%
     dplyr::mutate(record = dplyr::if_else(tag == "HEAD", "HD", record),
                   record = dplyr::if_else(tag == "TRLR", "TR", record),
                   record = dplyr::na_if(record, "")) %>%

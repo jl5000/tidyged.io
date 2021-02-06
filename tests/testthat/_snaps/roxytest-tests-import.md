@@ -1,4 +1,4 @@
-# Function read_gedcom() @ L26
+# Function read_gedcom() @ L29
 
     {
       "type": "list",
@@ -129,6 +129,51 @@
           "type": "character",
           "attributes": {},
           "value": ["", "", "5.5.5", "LINEAGE-LINKED", "5.5.5", "UNICODE", "GS", "GEDCOM Specification", "5.5.5", "gedcom.org", "", "LEIDEN", "www.gedcom.org", "2 Oct 2019", "0:00:00", "555Sample.ged", "English", "@U1@", "", "Reldon Poulson", "", "1900 43rd Street West", "Billings", "Montana", "68051", "United States of America", "+1 (406) 555-1232", "", "Robert Eugene /Williams/", "Williams", "Robert Eugene", "M", "", "2 Oct 1822", "Weston, Madison, Connecticut, United States of America", "@S1@", "Sec. 2, p. 45", "", "14 Apr 1905", "Stamford, Fairfield, Connecticut, United States of America", "", "Spring Hill Cemetery, Stamford, Fairfield, Connecticut, United States of America", "@F1@", "@F2@", "", "from 1900 to 1905", "", "Mary Ann /Wilson/", "Wilson", "Mary Ann", "F", "", "BEF 1828", "Connecticut, United States of America", "@F1@", "", "Joe /Williams/", "Williams", "Joe", "M", "", "11 Jun 1861", "Idaho Falls, Bonneville, Idaho, United States of America", "@F1@", "@F2@", "adopted", "", "16 Mar 1864", "", "@I1@", "@I2@", "@I3@", "", "Dec 1859", "Rapid City, Pennington, South Dakota, United States of America", "", "@I1@", "@I3@", "", "", "BIRT, DEAT, MARR", "FROM Jan 1820 TO DEC 1825", "Madison, Connecticut, United States of America", "Madison County Court", "Madison County Birth, Death, and Marriage Records", "Madison BMD Records", "@R1@", "13B-1234.01", "", "Family History Library", "", "35 N West Temple Street", "Salt Lake City", "Utah", "84150", "United States of America", ""]
+        }
+      ]
+    }
+
+---
+
+    {
+      "type": "list",
+      "attributes": {
+        "names": {
+          "type": "character",
+          "attributes": {},
+          "value": ["level", "record", "tag", "value"]
+        },
+        "row.names": {
+          "type": "integer",
+          "attributes": {},
+          "value": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        },
+        "class": {
+          "type": "character",
+          "attributes": {},
+          "value": ["tidyged", "tbl_df", "tbl", "data.frame"]
+        }
+      },
+      "value": [
+        {
+          "type": "double",
+          "attributes": {},
+          "value": [0, 1, 2, 2, 3, 1, 1, 0, 1, 0]
+        },
+        {
+          "type": "character",
+          "attributes": {},
+          "value": ["HD", "HD", "HD", "HD", "HD", "HD", "HD", "@U@", "@U@", "TR"]
+        },
+        {
+          "type": "character",
+          "attributes": {},
+          "value": ["HEAD", "GEDC", "VERS", "FORM", "VERS", "CHAR", "SOUR", "SUBM", "NAME", "TRLR"]
+        },
+        {
+          "type": "character",
+          "attributes": {},
+          "value": ["", "", "5.5.5", "LINEAGE-LINKED", "5.5.5", "UTF-8", "gedcom.org", "", "gedcom.org", ""]
         }
       ]
     }

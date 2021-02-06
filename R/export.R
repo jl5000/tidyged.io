@@ -10,8 +10,11 @@
 #'
 #' @return Nothing
 #' @export
+#' @tests
+#' expect_warning(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
+#'                             "my_family.txt"))
 write_gedcom <- function(gedcom, filepath) {
-  #expect_warning(write_gedcom(gedcom(), "my_family.txt") %>% file.remove("my_family.txt"))
+  
   if(file.exists(filepath)) file.remove(filepath)
   
   con <- file(filepath, encoding = "UTF-8", open = "a")
@@ -44,18 +47,18 @@ write_gedcom <- function(gedcom, filepath) {
 #' @param filename The name of the file (with extension).
 #'
 #' @return An updated tidyged object with the updated filename.
+#' @tests
+#' expect_snapshot_value(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
+#'                         update_header_with_filename("my_file.ged"), "json2")
+#' expect_snapshot_value(read_gedcom(system.file("extdata", "MINIMAL555.GED", package = "tidyged.io")) %>% 
+#'                         update_header_with_filename("my_file2.ged"), "json2")
 update_header_with_filename <- function(gedcom, filename) {
-  # expect_snapshot_value(gedcom(subm("Me")) %>% 
-  #                         update_header_with_filename("my_file.ged") %>% 
-  #                         remove_dates_for_tests(), "json2")
-  # expect_snapshot_value(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged")) %>% 
-  #                         update_header_with_filename("my_file.ged") %>% 
-  #                         remove_dates_for_tests(), "json2")
+ 
   if(nrow(dplyr::filter(gedcom, record == "HD", tag == "FILE")) == 0) {
     
     tibble::add_row(gedcom, 
                     tibble::tibble(level = 1, record = "HD", tag = "FILE", value = filename),
-                    .after = which(gedcom$record == "HD" & gedcom$tag == "SUBM"))
+                    .before = which(gedcom$record == "HD" & gedcom$tag == "SOUR"))
     
   } else if(nrow(dplyr::filter(gedcom, record == "HD", tag == "FILE")) == 1) {
     
@@ -77,7 +80,7 @@ update_header_with_filename <- function(gedcom, filename) {
 #' @return A tidyged object in the GEDCOM grammar ready to export.
 split_gedcom_values <- function(gedcom, char_limit) {
   # expect_snapshot_value(
-  #                 gedcom(subm("Me")) %>% 
+  #                 read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
   #                   add_source(title = paste(rep("a", 4095), collapse = "")) %>%
   #                   remove_dates_for_tests() %>% 
   #                   split_gedcom_values(248), "json2")
