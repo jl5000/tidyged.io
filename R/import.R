@@ -49,7 +49,7 @@ read_gedcom <- function(filepath) {
     dplyr::mutate(level = as.numeric(level),
                   value = stringr::str_replace_all(value, "@@", "@")) %>% 
     combine_gedcom_values() %>% 
-    set_class_to_tidyged()
+    tidyged.internals::set_class_to_tidyged()
   
   validate_gedcom(ged, gedcom_encoding)
   ged
@@ -110,18 +110,7 @@ check_line_lengths <- function(lines, limit) {
 }
 
 
-#' Make a dataframe a tidyged object
-#' 
-#' This function sets the attribute on a dataframe identifying it as a tidyged object.
-#'
-#' @param gedcom A tibble with content consistent with that of a tidyged object.
-#'
-#' @return A tidyged object.
-#' @export
-set_class_to_tidyged <- function(gedcom) {
-  class(gedcom) <- c("tidyged", "tbl_df", "tbl", "data.frame")
-  gedcom
-}
+
 
 #' Convert the GEDCOM grammar to the GEDCOM form
 #' 

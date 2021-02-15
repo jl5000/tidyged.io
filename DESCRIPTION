@@ -18,10 +18,13 @@ Imports:
     magrittr,
     tidyr,
     stringr,
-    tibble
+    tibble,
+    tidyged.internals
 Suggests: 
     testthat (>= 3.0.0),
     roxytest,
     tidyged
-Remotes: jl5000/tidyged
+Remotes: 
+    jl5000/tidyged.internals,
+    jl5000/tidyged
 Config/testthat/edition: 3
