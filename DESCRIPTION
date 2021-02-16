@@ -23,6 +23,7 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0),
     roxytest,
+    knitr,
     tidyged
 Remotes: 
     jl5000/tidyged.internals,

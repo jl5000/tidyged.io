@@ -18,11 +18,7 @@ ecosystem enables the handling of `tidyged` objects (tibble
 representations of GEDCOM files), and the main package of this ecosystem
 is [`tidyged`](https://jl5000.github.io/tidyged/).
 
-<center>
-
-![](man/figures/allhex.png)
-
-</center>
+<img src="man/figures/allhex.png" width="55%" style="display: block; margin: auto;" />
 
 ## Installation
 
