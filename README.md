@@ -18,6 +18,12 @@ ecosystem enables the handling of `tidyged` objects (tibble
 representations of GEDCOM files), and the main package of this ecosystem
 is [`tidyged`](https://jl5000.github.io/tidyged/).
 
+<center>
+
+![](man/figures/allhex.png)
+
+</center>
+
 ## Installation
 
 You can install the development version from
@@ -28,7 +34,7 @@ You can install the development version from
 devtools::install_github("jl5000/tidyged.io")
 ```
 
-## Importing existing files
+## Example
 
 The easiest way to create a `tidyged` object is to import an existing
 GEDCOM file. The package comes with some sample GEDCOM files, which can
