@@ -27,7 +27,7 @@ Import and export family tree GEDCOM files to and from tidy dataframes.
 The package is part of the `gedcompendium` ecosystem of packages. This ecosystem enables the handling of `tidyged` objects (tibble representations of GEDCOM files), and the main package of this ecosystem is [`tidyged`](https://jl5000.github.io/tidyged/).
 
 
-```{r, echo=FALSE, out.width="55%", fig.align='center'}
+```{r, echo=FALSE, out.width="65%", fig.align='center'}
 knitr::include_graphics("man/figures/allhex.png")
 ```
 
