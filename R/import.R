@@ -127,9 +127,9 @@ combine_gedcom_values <- function(gedcom) {
   
   gedcom %>% 
     dplyr::mutate(row = dplyr::row_number()) %>% 
-    dplyr::mutate(tag = dplyr::if_else(tag %in% tags, NA_character_, tag),
+    dplyr::mutate(value = dplyr::if_else(tag == "CONT", paste0("\n", value), value),
                   row = dplyr::if_else(tag %in% tags, NA_integer_, row),
-                  value = dplyr::if_else(tag == "CONT", paste0("\n", value), value)) %>%
+                  tag = dplyr::if_else(tag %in% tags, NA_character_, tag)) %>%
     tidyr::fill(tag, row, .direction = "down") %>%
     dplyr::group_by(record, tag, row) %>% 
     dplyr::summarise(level = min(level),
