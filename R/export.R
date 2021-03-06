@@ -13,7 +13,7 @@
 #' @tests
 #' expect_warning(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
 #'                             "my_family.txt"))
-write_gedcom <- function(gedcom, filepath = file.choose()) {
+write_gedcom <- function(gedcom, filepath) {
   
   if(file.exists(filepath)) file.remove(filepath)
   
@@ -121,6 +121,7 @@ create_cont_lines <- function(lines) {
 #' @return The same lines of the tidyged object, potentially with additional concatenation lines.
 create_conc_lines <- function(lines, char_limit) {
   
+  # A suitably unique string
   unique_delim <- "<>delimiter<>"
   
   lines %>% 
