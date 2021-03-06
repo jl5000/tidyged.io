@@ -13,7 +13,7 @@
 #' @tests
 #' expect_warning(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
 #'                             "my_family.txt"))
-write_gedcom <- function(gedcom, filepath) {
+write_gedcom <- function(gedcom, filepath = file.choose()) {
   
   if(file.exists(filepath)) file.remove(filepath)
   

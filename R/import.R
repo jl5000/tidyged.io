@@ -26,7 +26,7 @@
 #' expect_snapshot_value(
 #'     read_gedcom(system.file("extdata", "MINIMAL555.GED", package = "tidyged.io")), 
 #'     "json2")
-read_gedcom <- function(filepath) {
+read_gedcom <- function(filepath = file.choose()) {
   
   if(tolower(stringr::str_sub(filepath, -4, -1)) != ".ged")
     stop("GEDCOM file should have a .ged extension")
