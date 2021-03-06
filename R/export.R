@@ -85,10 +85,10 @@ split_gedcom_values <- function(gedcom, char_limit) {
   #                   remove_dates_for_tests() %>% 
   #                   split_gedcom_values(248), "json2")
   
-  header <- dplyr::filter(gedcom, record == "HD")
+  header <- dplyr::slice(gedcom, 1:6)
   
   gedcom %>% 
-    dplyr::filter(record != "HD") %>% #header shouldn't contain CONT/CONC lines
+    dplyr::slice(-(1:6)) %>% #header shouldn't contain CONT/CONC lines
     create_cont_lines() %>% 
     create_conc_lines(char_limit) %>% 
     dplyr::bind_rows(header, .)
