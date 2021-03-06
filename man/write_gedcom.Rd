@@ -4,7 +4,7 @@
 \alias{write_gedcom}
 \title{Save a tidyged object to disk as a GEDCOM file}
 \usage{
-write_gedcom(gedcom, filepath)
+write_gedcom(gedcom, filepath = file.choose())
 }
 \arguments{
 \item{gedcom}{A tidyged object.}

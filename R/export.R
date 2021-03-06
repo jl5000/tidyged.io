@@ -71,12 +71,12 @@ update_header_with_filename <- function(gedcom, filename) {
 
 #' Convert the GEDCOM form to GEDCOM grammar
 #' 
-#' This function introduces CONC/CONT lines for line values that exceed the given number of characters.
-#' This function only uses the CONC(atenation) tag for splitting values, and does
-#' not use the CONT(inuation) tag. This is because it is easier to implement.
+#' This function introduces CONC/CONT lines for line values that exceed the given number of characters and
+#' for lines containing line breaks.
 #'
 #' @param gedcom A tidyged object.
 #' @param char_limit Maximum string length of values.
+#' 
 #' @return A tidyged object in the GEDCOM grammar ready to export.
 split_gedcom_values <- function(gedcom, char_limit) {
   # expect_snapshot_value(
@@ -84,11 +84,46 @@ split_gedcom_values <- function(gedcom, char_limit) {
   #                   add_source(title = paste(rep("a", 4095), collapse = "")) %>%
   #                   remove_dates_for_tests() %>% 
   #                   split_gedcom_values(248), "json2")
-  unique_delim <- "<>delimiter<>"
+  
   header <- dplyr::filter(gedcom, record == "HD")
   
   gedcom %>% 
     dplyr::filter(record != "HD") %>% #header shouldn't contain CONT/CONC lines
+    create_cont_lines() %>% 
+    create_conc_lines(char_limit) %>% 
+    dplyr::bind_rows(header, .)
+  
+  
+}
+
+#' Create CONTinuation lines
+#'
+#' @param lines Lines of a tidyged object.
+#'
+#' @return The same lines of the tidyged object, potentially with additional continuation lines.
+create_cont_lines <- function(lines) {
+  
+  lines %>% 
+    dplyr::mutate(split = stringr::str_detect(value, "\n"), #mark rows to split
+                  row = dplyr::row_number()) %>% # mark unique rows
+    tidyr::separate_rows(value, sep = "\n") %>% 
+    dplyr::mutate(tag = dplyr::if_else(split & dplyr::lag(split) & row == dplyr::lag(row), "CONT", tag)) %>% 
+    dplyr::mutate(level = dplyr::if_else(split & dplyr::lag(split) & row == dplyr::lag(row), level + 1, level)) %>% 
+    dplyr::select(-split, -row)  #remove temporary columns
+  
+}
+
+#' Create CONCatenation lines
+#'
+#' @param lines Lines of a tidyged object.
+#' @param char_limit Character limit of line values.
+#'
+#' @return The same lines of the tidyged object, potentially with additional concatenation lines.
+create_conc_lines <- function(lines, char_limit) {
+  
+  unique_delim <- "<>delimiter<>"
+  
+  lines %>% 
     dplyr::mutate(split = nchar(value) > char_limit, #mark rows to split
                   row = dplyr::row_number()) %>% # mark unique rows
     dplyr::mutate(value = gsub(paste0("(.{", char_limit, "})"), #add delimiters where
@@ -97,10 +132,14 @@ split_gedcom_values <- function(gedcom, char_limit) {
     dplyr::mutate(value = gsub(paste0(unique_delim, "$"), "", value)) %>% #remove last delimiter
     tidyr::separate_rows(value, sep = unique_delim) %>% 
     dplyr::mutate(tag = dplyr::if_else(split & dplyr::lag(split) & row == dplyr::lag(row), "CONC", tag)) %>% # use CONC tags
-    dplyr::mutate(level = dplyr::if_else(split & dplyr::lag(split) & row == dplyr::lag(row), level + 1, level)) %>% # increase levels
-    dplyr::select(-split, -row) %>%  #remove temporary columns
-    dplyr::bind_rows(header, .)
-  
+    dplyr::mutate(level = dplyr::if_else(split & 
+                                           dplyr::lag(split) & 
+                                           row == dplyr::lag(row) & 
+                                           !dplyr::lag(tag) %in% c("CONT", "CONC"), 
+                                         level + 1, level)) %>% # increase levels (not if previous is cont/conc)
+    dplyr::select(-split, -row)  #remove temporary columns
   
 }
+
+
 

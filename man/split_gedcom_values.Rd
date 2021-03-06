@@ -15,7 +15,6 @@ split_gedcom_values(gedcom, char_limit)
 A tidyged object in the GEDCOM grammar ready to export.
 }
 \description{
-This function introduces CONC/CONT lines for line values that exceed the given number of characters.
-This function only uses the CONC(atenation) tag for splitting values, and does
-not use the CONT(inuation) tag. This is because it is easier to implement.
+This function introduces CONC/CONT lines for line values that exceed the given number of characters and
+for lines containing line breaks.
 }

@@ -4,7 +4,7 @@
 \alias{read_gedcom}
 \title{Import a GEDCOM file}
 \usage{
-read_gedcom(filepath)
+read_gedcom(filepath = file.choose())
 }
 \arguments{
 \item{filepath}{The full filepath of the GEDCOM file.}
