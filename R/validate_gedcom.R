@@ -35,9 +35,9 @@ validate_gedcom <- function(gedcom, expected_encoding) {
 #' @return Nothing
 validate_header <- function(gedcom, expected_encoding) {
   
-  if(!all.equal(gedcom$level[1:6], c(0,1,2,2,3,1)) |
-     !all.equal(gedcom$tag[1:6], c("HEAD","GEDC","VERS","FORM","VERS","CHAR")) |
-     !all.equal(gedcom$value[1:5], c("", "", "5.5.5", "LINEAGE-LINKED", "5.5.5")))
+  if(!isTRUE(all.equal(gedcom$level[1:6], c(0,1,2,2,3,1))) |
+     !isTRUE(all.equal(gedcom$tag[1:6], c("HEAD","GEDC","VERS","FORM","VERS","CHAR"))) |
+     !isTRUE(all.equal(gedcom$value[1:5], c("", "", "5.5.5", "LINEAGE-LINKED", "5.5.5"))))
     stop("Malformed header")
   
   char <- dplyr::filter(gedcom, record == "HD", tag == "CHAR")$value
