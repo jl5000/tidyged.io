@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/jl5000/tidyged.io/workflows/R-CMD-check/badge.svg)](https://github.com/jl5000/tidyged.io/actions)
 [![](https://codecov.io/gh/jl5000/tidyged.io/branch/main/graph/badge.svg)](https://codecov.io/gh/jl5000/tidyged.io)
 [![CodeFactor](https://www.codefactor.io/repository/github/jl5000/tidyged.io/badge)](https://www.codefactor.io/repository/github/jl5000/tidyged.io)
-[![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
 Import and export family tree GEDCOM files to and from tidy dataframes.
@@ -42,8 +42,17 @@ library(tidyged.io)
 #> This package assumes imported GEDCOM files are valid and very few validation checks are carried out.
 #> Several GEDCOM validators are available, including an online validator at http://ged-inline.elasticbeanstalk.com/
 
-read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
-  print(n = Inf)
+my_ged <- read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io"))
+
+class(my_ged)
+#> [1] "tidyged"    "tbl_df"     "tbl"        "data.frame"
+```
+
+These objects are a subclass of tibbles, which allows the use of
+existing `tidyverse` functions:
+
+``` r
+print(my_ged, n = Inf)
 #> # A tibble: 97 x 4
 #>    level record tag   value                                                     
 #>    <dbl> <chr>  <chr> <chr>                                                     

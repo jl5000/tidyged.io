@@ -13,6 +13,7 @@
 #' @tests
 #' expect_warning(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
 #'                             "my_family.txt"))
+#'  file.remove("my_family.txt")
 write_gedcom <- function(gedcom, filepath) {
   
   if(file.exists(filepath)) file.remove(filepath)
@@ -80,12 +81,7 @@ update_header_with_filename <- function(gedcom, filename) {
 #' 
 #' @return A tidyged object in the GEDCOM grammar ready to export.
 split_gedcom_values <- function(gedcom, char_limit) {
-  # expect_snapshot_value(
-  #                 read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
-  #                   add_source(title = paste(rep("a", 4095), collapse = "")) %>%
-  #                   remove_dates_for_tests() %>% 
-  #                   split_gedcom_values(248), "json2")
-  
+
   header <- dplyr::slice(gedcom, 1:6)
   
   gedcom %>% 
@@ -93,7 +89,6 @@ split_gedcom_values <- function(gedcom, char_limit) {
     create_cont_lines() %>% 
     create_conc_lines(char_limit) %>% 
     dplyr::bind_rows(header, .)
-  
   
 }
 

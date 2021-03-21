@@ -1,7 +1,7 @@
 
 #' Validate a GEDCOM file
 #' 
-#' Conduct some simple (but not exhaustive) checks on a GEDCOM file
+#' Conduct some simple (but not exhaustive) checks on a GEDCOM file.
 #' 
 #' This function is called when importing a GEDCOM file. The checks contained within are relatively
 #' simple since there are a wealth of GEDCOM validators already available.

@@ -16,7 +16,7 @@ validate_gedcom(gedcom, expected_encoding)
 Nothing
 }
 \description{
-Conduct some simple (but not exhaustive) checks on a GEDCOM file
+Conduct some simple (but not exhaustive) checks on a GEDCOM file.
 }
 \details{
 This function is called when importing a GEDCOM file. The checks contained within are relatively
