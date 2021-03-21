@@ -32,10 +32,11 @@ write_gedcom <- function(gedcom, filepath) {
     split_gedcom_values(char_limit = .pkgenv$gedcom_phys_value_limit) %>% 
     dplyr::mutate(record = dplyr::if_else(dplyr::lag(record) == record, "", record)) %>% 
     dplyr::mutate(record = dplyr::if_else(record == "TR", "", record)) %>% 
-    tidyr::replace_na(list(record = "")) %>% 
+    tidyr::replace_na(list(record = "")) %>% #First line
     dplyr::transmute(value = paste(level, record, tag, value)) %>% 
     dplyr::pull(value) %>% 
-    stringr::str_replace_all("  ", " ") %>%
+    stringr::str_replace("(^\\d)  ", "\\1 ") %>% #remove double spaces between level and tag
+    stringr::str_replace("(^\\d (@.+@)? ?\\w{3,5}) $", "\\1") %>% #remove spaces after tag
     writeLines(con)
   
 }
