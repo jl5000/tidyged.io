@@ -100,6 +100,8 @@ split_gedcom_values <- function(gedcom, char_limit) {
 create_cont_lines <- function(lines) {
   
   lines %>% 
+    dplyr::mutate(value = stringr::str_replace_all(value, "\n\r|\r\n", "\n"),
+                  value = stringr::str_replace_all(value, "\r", "\n")) %>%
     dplyr::mutate(split = stringr::str_detect(value, "\n"), #mark rows to split
                   row = dplyr::row_number()) %>% # mark unique rows
     tidyr::separate_rows(value, sep = "\n") %>% 

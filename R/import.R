@@ -126,6 +126,8 @@ combine_gedcom_values <- function(gedcom) {
   tags <- c("CONT", "CONC")
   
   gedcom %>% 
+    dplyr::mutate(value = stringr::str_replace_all(value, "\n\r|\r\n", "\n"),
+                  value = stringr::str_replace_all(value, "\r", "\n")) %>%
     dplyr::mutate(row = dplyr::row_number()) %>% 
     dplyr::mutate(value = dplyr::if_else(tag == "CONT", paste0("\n", value), value),
                   row = dplyr::if_else(tag %in% tags, NA_integer_, row),
