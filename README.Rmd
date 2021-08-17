@@ -63,7 +63,8 @@ Many other GEDCOM readers will carry out extensive checks on every line of a GED
 * Ensuring the file has a valid Byte Order Mark which is consistent with that described in the file;
 * Ensuring no lines exceed the character limit;
 * Ensuring the header is correctly formed;
-* Ensuring there is only one header, trailer, and submitter record defined.
+* Ensuring there is only one header, trailer, and submitter record defined;
+* Capitalising all tags and keywords (e.g. FROM/TO in dates).
 
 In the future, the `gedcompendium` ecosystem may include a dedicated validation package, but this is currently a low priority.
 

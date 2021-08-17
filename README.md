@@ -53,7 +53,7 @@ existing `tidyverse` functions:
 
 ``` r
 print(my_ged, n = Inf)
-#> # A tibble: 97 x 4
+#> # A tibble: 97 × 4
 #>    level record tag   value                                                     
 #>    <dbl> <chr>  <chr> <chr>                                                     
 #>  1     0 HD     HEAD  ""                                                        
@@ -69,7 +69,7 @@ print(my_ged, n = Inf)
 #> 11     3 HD     ADDR  ""                                                        
 #> 12     4 HD     CITY  "LEIDEN"                                                  
 #> 13     3 HD     WWW   "www.gedcom.org"                                          
-#> 14     1 HD     DATE  "2 Oct 2019"                                              
+#> 14     1 HD     DATE  "2 OCT 2019"                                              
 #> 15     2 HD     TIME  "0:00:00"                                                 
 #> 16     1 HD     FILE  "555Sample.ged"                                           
 #> 17     1 HD     LANG  "English"                                                 
@@ -89,19 +89,19 @@ print(my_ged, n = Inf)
 #> 31     2 @I1@   GIVN  "Robert Eugene"                                           
 #> 32     1 @I1@   SEX   "M"                                                       
 #> 33     1 @I1@   BIRT  ""                                                        
-#> 34     2 @I1@   DATE  "2 Oct 1822"                                              
+#> 34     2 @I1@   DATE  "2 OCT 1822"                                              
 #> 35     2 @I1@   PLAC  "Weston, Madison, Connecticut, United States of America"  
 #> 36     2 @I1@   SOUR  "@S1@"                                                    
 #> 37     3 @I1@   PAGE  "Sec. 2, p. 45"                                           
 #> 38     1 @I1@   DEAT  ""                                                        
-#> 39     2 @I1@   DATE  "14 Apr 1905"                                             
+#> 39     2 @I1@   DATE  "14 APR 1905"                                             
 #> 40     2 @I1@   PLAC  "Stamford, Fairfield, Connecticut, United States of Ameri…
 #> 41     1 @I1@   BURI  ""                                                        
 #> 42     2 @I1@   PLAC  "Spring Hill Cemetery, Stamford, Fairfield, Connecticut, …
 #> 43     1 @I1@   FAMS  "@F1@"                                                    
 #> 44     1 @I1@   FAMS  "@F2@"                                                    
 #> 45     1 @I1@   RESI  ""                                                        
-#> 46     2 @I1@   DATE  "from 1900 to 1905"                                       
+#> 46     2 @I1@   DATE  "FROM 1900 TO 1905"                                       
 #> 47     0 @I2@   INDI  ""                                                        
 #> 48     1 @I2@   NAME  "Mary Ann /Wilson/"                                       
 #> 49     2 @I2@   SURN  "Wilson"                                                  
@@ -117,19 +117,19 @@ print(my_ged, n = Inf)
 #> 59     2 @I3@   GIVN  "Joe"                                                     
 #> 60     1 @I3@   SEX   "M"                                                       
 #> 61     1 @I3@   BIRT  ""                                                        
-#> 62     2 @I3@   DATE  "11 Jun 1861"                                             
+#> 62     2 @I3@   DATE  "11 JUN 1861"                                             
 #> 63     2 @I3@   PLAC  "Idaho Falls, Bonneville, Idaho, United States of America"
 #> 64     1 @I3@   FAMC  "@F1@"                                                    
 #> 65     1 @I3@   FAMC  "@F2@"                                                    
 #> 66     2 @I3@   PEDI  "adopted"                                                 
 #> 67     1 @I3@   ADOP  ""                                                        
-#> 68     2 @I3@   DATE  "16 Mar 1864"                                             
+#> 68     2 @I3@   DATE  "16 MAR 1864"                                             
 #> 69     0 @F1@   FAM   ""                                                        
 #> 70     1 @F1@   HUSB  "@I1@"                                                    
 #> 71     1 @F1@   WIFE  "@I2@"                                                    
 #> 72     1 @F1@   CHIL  "@I3@"                                                    
 #> 73     1 @F1@   MARR  ""                                                        
-#> 74     2 @F1@   DATE  "Dec 1859"                                                
+#> 74     2 @F1@   DATE  "DEC 1859"                                                
 #> 75     2 @F1@   PLAC  "Rapid City, Pennington, South Dakota, United States of A…
 #> 76     0 @F2@   FAM   ""                                                        
 #> 77     1 @F2@   HUSB  "@I1@"                                                    
@@ -137,7 +137,7 @@ print(my_ged, n = Inf)
 #> 79     0 @S1@   SOUR  ""                                                        
 #> 80     1 @S1@   DATA  ""                                                        
 #> 81     2 @S1@   EVEN  "BIRT, DEAT, MARR"                                        
-#> 82     3 @S1@   DATE  "FROM Jan 1820 TO DEC 1825"                               
+#> 82     3 @S1@   DATE  "FROM JAN 1820 TO DEC 1825"                               
 #> 83     3 @S1@   PLAC  "Madison, Connecticut, United States of America"          
 #> 84     2 @S1@   AGNC  "Madison County Court"                                    
 #> 85     1 @S1@   TITL  "Madison County Birth, Death, and Marriage Records"       
@@ -161,12 +161,13 @@ is used correctly. The `tidyged.io` package carries out very few checks,
 relying on the user to check their files beforehand (as described when
 loading the package). The few checks that are carried out include:
 
-  - Ensuring the file has a valid Byte Order Mark which is consistent
+-   Ensuring the file has a valid Byte Order Mark which is consistent
     with that described in the file;
-  - Ensuring no lines exceed the character limit;
-  - Ensuring the header is correctly formed;
-  - Ensuring there is only one header, trailer, and submitter record
-    defined.
+-   Ensuring no lines exceed the character limit;
+-   Ensuring the header is correctly formed;
+-   Ensuring there is only one header, trailer, and submitter record
+    defined;
+-   Capitalising all tags and keywords (e.g. FROM/TO in dates).
 
 In the future, the `gedcompendium` ecosystem may include a dedicated
 validation package, but this is currently a low priority.
@@ -176,4 +177,4 @@ If you want to export your file as a valid GEDCOM file, you can use the
 
 ## References
 
-  - [The GEDCOM 5.5.5 Specification](https://www.gedcom.org/gedcom.html)
+-   [The GEDCOM 5.5.5 Specification](https://www.gedcom.org/gedcom.html)
