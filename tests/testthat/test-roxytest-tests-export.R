@@ -2,14 +2,21 @@
 
 # File R/export.R: @tests
 
-test_that("Function write_gedcom() @ L17", {
+test_that("Function write_gedcom() @ L24", {
   expect_warning(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
                               "my_family.txt"))
    file.remove("my_family.txt")
+  expect_identical(
+    read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")),
+    read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
+      write_gedcom("555Sample.ged") %>% 
+      read_gedcom()
+  )
+  file.remove("555Sample.ged")
 })
 
 
-test_that("Function update_header_with_filename() @ L57", {
+test_that("Function update_header_with_filename() @ L69", {
   expect_snapshot_value(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
                           update_header_with_filename("my_file.ged"), "json2")
   expect_snapshot_value(read_gedcom(system.file("extdata", "MINIMAL555.GED", package = "tidyged.io")) %>% 

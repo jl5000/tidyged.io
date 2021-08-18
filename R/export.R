@@ -14,6 +14,13 @@
 #' expect_warning(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
 #'                             "my_family.txt"))
 #'  file.remove("my_family.txt")
+#' expect_identical(
+#'   read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")),
+#'   read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
+#'     write_gedcom("555Sample.ged") %>% 
+#'     read_gedcom()
+#' )
+#' file.remove("555Sample.ged")
 write_gedcom <- function(gedcom, filepath) {
   
   if(file.exists(filepath)) file.remove(filepath)
@@ -42,6 +49,8 @@ write_gedcom <- function(gedcom, filepath) {
     stringr::str_replace("(^\\d)  ", "\\1 ") %>% #remove double spaces between level and tag
     stringr::str_replace("(^\\d (@.+@)? ?\\w{3,5}) $", "\\1") %>% #remove spaces after tag
     writeLines(con)
+  
+  invisible(filepath)
   
 }
 
