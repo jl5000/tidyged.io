@@ -18,8 +18,11 @@ write_gedcom <- function(gedcom, filepath) {
   
   if(file.exists(filepath)) file.remove(filepath)
   
+  con <- file(filepath, encoding = "UTF-8", open = "wb")
+  suppressWarnings(writeBin(as.raw(c(0xef, 0xbb, 0xbf)), con))
+  close(con)
+  
   con <- file(filepath, encoding = "UTF-8", open = "a")
-  suppressWarnings(writeChar("\ufeff", con, eos = NULL))
   on.exit(close(con))
   
   if(tolower(stringr::str_sub(filepath, -4, -1)) != ".ged")
