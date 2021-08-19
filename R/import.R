@@ -147,19 +147,16 @@ combine_gedcom_values <- function(gedcom) {
 
 capitalise_tags_and_keywords <- function(gedcom){
   
-  date_terms <- c("^FROM ","TO ","^BET "," AND ","^BEF ","^AFT ","^CAL ","^EST ","^ABT ")
-  date_terms <- c(date_terms, month.abb)
-  date_terms_reg <- stringr::regex(paste(date_terms, collapse = "|"), ignore_case = TRUE)
-  
   gedcom %>% 
     dplyr::mutate(tag = toupper(tag)) %>% 
     dplyr::mutate(value = ifelse(tag == "SEX", toupper(value), value),
                   value = ifelse(tag == "ADOP", toupper(value), value),
-                  value = ifelse(tag == "ROLE" & !stringr::str_detect(value, "^\\(.+\\)$"), 
+                  value = ifelse(tag == "ROLE" & 
+                                   !stringr::str_detect(value, tidyged.internals::reg_custom_value()), 
                                  toupper(value), value),
-                  value = ifelse(tag == "DATE", 
-                                 stringr::str_replace_all(value, date_terms_reg, toupper),
-                                 value))
+                  value = ifelse(tag == "DATE" &
+                                   !stringr::str_detect(value, tidyged.internals::reg_custom_value()), 
+                                 toupper(value), value))
   
   
 }
