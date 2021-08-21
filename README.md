@@ -167,7 +167,13 @@ loading the package). The few checks that are carried out include:
 -   Ensuring the header is correctly formed;
 -   Ensuring there is only one header, trailer, and submitter record
     defined;
--   Capitalising all tags and keywords (e.g. FROM/TO in dates).
+-   Checking for unsupported date types (only dates in the Gregorian
+    calendar are supported).
+
+The package strives to modify as little of the file as possible on
+import, however it does ensure some values are in upper/lower case in
+line with the GEDCOM specification and to ensure the correct functioning
+of `gedcompendium` packages.
 
 In the future, the `gedcompendium` ecosystem may include a dedicated
 validation package, but this is currently a low priority.

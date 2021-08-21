@@ -21,6 +21,13 @@ validate_gedcom <- function(gedcom, expected_encoding) {
   if(sum(gedcom$record == "HD" & gedcom$tag == "SOUR") != 1) warning("GEDCOM header has no single system ID")
   if(sum(gedcom$record == "HD" & gedcom$tag == "GEDC") != 1) warning("GEDCOM header is lacking file information")
   
+  unsupp_calendars <- c("HEBREW","FRENCH R","JULIAN","UNKNOWN")
+  unsupp_calendars <- paste0("^@#D", unsupp_calendars, "@")
+  
+  dates <- dplyr::filter(gedcom, tag == "DATE")$value
+  if(any(stringr::str_detect(dates, paste(unsupp_calendars, collapse = "|"))))
+     stop("Non-Gregorian calendar dates detected. The gedcompendium does not support non-Gregorian calendars")
+  
 }
 
 

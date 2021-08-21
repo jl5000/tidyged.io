@@ -150,13 +150,20 @@ capitalise_tags_and_keywords <- function(gedcom){
   gedcom %>% 
     dplyr::mutate(tag = toupper(tag)) %>% 
     dplyr::mutate(value = ifelse(tag == "SEX", toupper(value), value),
+                  value = ifelse(tag == "PEDI", tolower(value), value),
                   value = ifelse(tag == "ADOP", toupper(value), value),
+                  value = ifelse(tag == "EVEN", toupper(value), value),
+                  value = ifelse(tag == "LATI", toupper(value), value),
+                  value = ifelse(tag == "LONG", toupper(value), value),
                   value = ifelse(tag == "ROLE" & 
                                    !stringr::str_detect(value, tidyged.internals::reg_custom_value()), 
                                  toupper(value), value),
                   value = ifelse(tag == "DATE" &
                                    !stringr::str_detect(value, tidyged.internals::reg_custom_value()), 
-                                 toupper(value), value))
+                                 toupper(value), value),
+                  value = ifelse(tag == "DATE" &
+                                   !stringr::str_detect(value, tidyged.internals::reg_custom_value()),
+                                 stringr::str_remove(value, "@#DGREGORIAN@ "), value))
   
   
 }
