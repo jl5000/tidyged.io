@@ -16,7 +16,7 @@ test_that("Function write_gedcom() @ L24", {
 })
 
 
-test_that("Function update_header_with_filename() @ L69", {
+test_that("Function update_header_with_filename() @ L72", {
   expect_snapshot_value(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")) %>% 
                           update_header_with_filename("my_file.ged"), "json2")
   expect_snapshot_value(read_gedcom(system.file("extdata", "MINIMAL555.GED", package = "tidyged.io")) %>% 

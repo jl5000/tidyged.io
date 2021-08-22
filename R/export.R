@@ -56,6 +56,9 @@ write_gedcom <- function(gedcom, filepath) {
 
 
 #' Update GEDCOM header with filename
+#' 
+#' @details 
+#' If the file does not already have a filename, then one is not added.
 #'
 #' @param gedcom A tidyged object.
 #' @param filename The name of the file (with extension).
@@ -68,18 +71,12 @@ write_gedcom <- function(gedcom, filepath) {
 #'                         update_header_with_filename("my_file2.ged"), "json2")
 update_header_with_filename <- function(gedcom, filename) {
  
-  if(nrow(dplyr::filter(gedcom, record == "HD", tag == "FILE")) == 0) {
-    
-    tibble::add_row(gedcom, 
-                    tibble::tibble(level = 1, record = "HD", tag = "FILE", value = filename),
-                    .before = which(gedcom$record == "HD" & gedcom$tag == "SOUR"))
-    
-  } else if(nrow(dplyr::filter(gedcom, record == "HD", tag == "FILE")) == 1) {
-    
-    dplyr::mutate(gedcom, 
-                  value = dplyr::if_else(record == "HD" & tag == "FILE", filename, value))
+  if(nrow(dplyr::filter(gedcom, level == 1, record == "HD", tag == "FILE")) > 0) {
+
+    gedcom <- dplyr::mutate(gedcom, 
+                  value = dplyr::if_else(record == "HD" & tag == "FILE" & level == 1, filename, value))
   }
-  
+  gedcom
 }
 
 

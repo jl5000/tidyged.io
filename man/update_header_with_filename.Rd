@@ -17,3 +17,6 @@ An updated tidyged object with the updated filename.
 \description{
 Update GEDCOM header with filename
 }
+\details{
+If the file does not already have a filename, then one is not added.
+}
