@@ -152,7 +152,7 @@ capitalise_tags_and_keywords <- function(gedcom){
     dplyr::mutate(value = dplyr::if_else(tag == "SEX", toupper(value), value),
                   value = dplyr::if_else(tag == "PEDI", tolower(value), value),
                   value = dplyr::if_else(tag == "ADOP", toupper(value), value),
-                  value = dplyr::if_else(tag == "EVEN", toupper(value), value),
+                  value = dplyr::if_else(level == 2 & tag == "EVEN", toupper(value), value),
                   value = dplyr::if_else(tag == "LATI", toupper(value), value),
                   value = dplyr::if_else(tag == "LONG", toupper(value), value),
                   value = dplyr::if_else(tag == "ROLE" & 
