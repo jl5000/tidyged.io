@@ -173,13 +173,51 @@ capitalise_tags_and_keywords <- function(gedcom){
 create_custom_records <- function(gedcom){
   
   gedcom %>% 
-  create_addr_records()
-  create_plac_records()
-  
+    create_addr_records() %>% 
+    create_plac_records()
   
 }
 
 create_addr_records <- function(gedcom){
+  
+  address_rows <- c(tidyged.internals::identify_section(gedcom, 1, "ADDR"),
+                    tidyged.internals::identify_section(gedcom, 2, "ADDR"),
+                    tidyged.internals::identify_section(gedcom, 3, "ADDR"))
+  
+  if(length(address_rows) <= 1) return(gedcom)
+  
+  # Remove rows with no postal address parts
+  address_rows <- address_rows[-which(gedcom$tag[address_rows] == "ADDR" & 
+                                        gedcom$level[address_rows + 1] <= gedcom$level[address_rows])]
+  
+  # unique addresses
+  addresses <- gedcom %>% 
+    dplyr::select(-level,-record) %>% 
+    dplyr::slice(address_rows) %>% 
+    dplyr::mutate(new_addr = tag == "ADDR",
+                  addr_no = cumsum(new_addr),
+                  tag = factor(tag, levels = c("ADDR","ADR1","ADR2","ADR3","CITY","STAE","POST","CTRY"),
+                               ordered = TRUE)) %>% 
+    dplyr::arrange(addr_no, tag) %>% 
+    dplyr::select(-new_addr) %>% 
+    dplyr::nest_by(addr_no) %>% 
+    dplyr::ungroup() %>% 
+    dplyr::distinct(data) %>% 
+    dplyr::mutate(record = paste0("@A", dplyr::row_number(), "@"))
+  
+  addr_records <- addresses %>% 
+    tidyr::unnest(data) %>% 
+    dplyr::mutate(value = dplyr::if_else(tag == "ADDR", record, value),
+                  level = dplyr::if_else(tag == "ADDR", 0, 1)) %>% 
+    dplyr::select(record, level, tag, value)
+  
+  # Add xrefs to addresses
+  
+  # Remove address lines
+  
+  # Add addr_records
+  
+  tidyged.internals::assign_xref_addr(gedcom)
   
   gedcom
 }
