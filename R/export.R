@@ -36,6 +36,7 @@ write_gedcom <- function(gedcom, filepath) {
     warning("Output is not being saved as a GEDCOM file (*.ged)")
   
   gedcom %>%
+    remove_custom_records() %>% 
     update_header_with_filename(filename = basename(filepath)) %>% 
     dplyr::mutate(value = dplyr::if_else(stringr::str_detect(value, tidyged.internals::reg_xref(TRUE)),
                                          value,
@@ -54,6 +55,12 @@ write_gedcom <- function(gedcom, filepath) {
   
 }
 
+
+remove_custom_records <- function(gedcom){
+  
+  gedcom
+  
+}
 
 #' Update GEDCOM header with filename
 #' 

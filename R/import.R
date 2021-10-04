@@ -50,6 +50,7 @@ read_gedcom <- function(filepath = file.choose()) {
                   value = stringr::str_replace_all(value, "@@", "@")) %>% 
     combine_gedcom_values() %>% 
     capitalise_tags_and_keywords() %>% 
+    create_custom_records() %>% 
     tidyged.internals::set_class_to_tidyged()
   
   validate_gedcom(ged, gedcom_encoding)
@@ -166,4 +167,24 @@ capitalise_tags_and_keywords <- function(gedcom){
                                          stringr::str_remove(value, "@#DGREGORIAN@ "), value))
   
   
+}
+
+
+create_custom_records <- function(gedcom){
+  
+  gedcom %>% 
+  create_addr_records()
+  create_plac_records()
+  
+  
+}
+
+create_addr_records <- function(gedcom){
+  
+  gedcom
+}
+
+create_plac_records <- function(gedcom){
+  
+  gedcom
 }
