@@ -180,6 +180,8 @@ create_custom_records <- function(gedcom){
 
 create_addr_records <- function(gedcom){
   
+  addr_tags <- c("ADDR","ADR1","ADR2","ADR3","CITY","STAE","POST","CTRY")
+    
   address_rows <- c(tidyged.internals::identify_section(gedcom, 1, "ADDR"),
                     tidyged.internals::identify_section(gedcom, 2, "ADDR"),
                     tidyged.internals::identify_section(gedcom, 3, "ADDR"))
@@ -190,34 +192,39 @@ create_addr_records <- function(gedcom){
   address_rows <- address_rows[-which(gedcom$tag[address_rows] == "ADDR" & 
                                         gedcom$level[address_rows + 1] <= gedcom$level[address_rows])]
   
-  # unique addresses
-  addresses <- gedcom %>% 
+  # all addresses nested
+  orig_addresses <- gedcom %>% 
     dplyr::select(-level,-record) %>% 
     dplyr::slice(address_rows) %>% 
     dplyr::mutate(new_addr = tag == "ADDR",
                   addr_no = cumsum(new_addr),
-                  tag = factor(tag, levels = c("ADDR","ADR1","ADR2","ADR3","CITY","STAE","POST","CTRY"),
-                               ordered = TRUE)) %>% 
+                  tag = factor(tag, levels = addr_tags, ordered = TRUE)) %>% 
     dplyr::arrange(addr_no, tag) %>% 
     dplyr::select(-new_addr) %>% 
     dplyr::nest_by(addr_no) %>% 
-    dplyr::ungroup() %>% 
+    dplyr::ungroup() 
+  
+  # unique addresses nested with xrefs
+  uniq_addresses <- orig_addresses %>% 
     dplyr::distinct(data) %>% 
     dplyr::mutate(record = paste0("@A", dplyr::row_number(), "@"))
   
-  addr_records <- addresses %>% 
+  addr_lookup <- dplyr::left_join(orig_addresses, uniq_addresses, by = "data")
+  
+  addr_records <- uniq_addresses %>% 
     tidyr::unnest(data) %>% 
-    dplyr::mutate(value = dplyr::if_else(tag == "ADDR", record, value),
-                  level = dplyr::if_else(tag == "ADDR", 0, 1)) %>% 
+    dplyr::mutate(level = dplyr::if_else(tag == "ADDR", 0, 1)) %>% 
     dplyr::select(record, level, tag, value)
   
   # Add xrefs to addresses
-  
+  gedcom[intersect(which(gedcom$tag == "ADDR"), address_rows), "value"] <- addr_lookup$record
+
   # Remove address lines
+  gedcom <- dplyr::filter(gedcom, !tag %in% addr_tags[-1])
   
   # Add addr_records
-  
-  tidyged.internals::assign_xref_addr(gedcom)
+  gedcom <- gedcom %>%
+    dplyr::add_row(addr_records, .before = nrow(.))
   
   gedcom
 }
