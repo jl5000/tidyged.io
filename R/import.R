@@ -163,7 +163,8 @@ capitalise_tags_and_keywords <- function(gedcom){
                                          toupper(value), value),
                   value = dplyr::if_else(tag == "DATE" &
                                            !stringr::str_detect(value, tidyged.internals::reg_custom_value()),
-                                         stringr::str_remove(value, "@#DGREGORIAN@ "), value))
+                                         stringr::str_remove(value, "@#DGREGORIAN@ "), value)) %>% 
+    dplyr::mutate(tag = dplyr::if_else(tag == "URL", "WWW", tag))
   
   
 }
