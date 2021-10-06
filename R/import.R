@@ -50,7 +50,7 @@ read_gedcom <- function(filepath = file.choose()) {
                   value = stringr::str_replace_all(value, "@@", "@")) %>% 
     combine_gedcom_values() %>% 
     capitalise_tags_and_keywords() %>% 
-    create_custom_records() %>% 
+    create_addr_records() %>% 
     tidyged.internals::set_class_to_tidyged()
   
   validate_gedcom(ged, gedcom_encoding)
@@ -169,28 +169,28 @@ capitalise_tags_and_keywords <- function(gedcom){
   
 }
 
-
-create_custom_records <- function(gedcom){
-  
-  gedcom %>% 
-    create_addr_records() %>% 
-    create_plac_records()
-  
-}
-
+#' Create custom address records
+#' 
+#' This function reduces duplication by creating address records and referencing
+#' them in the relevant places in the object.
+#'
+#' @param gedcom A tidyged object.
+#'
+#' @return An updated tidyged object with the addition of address records.
 create_addr_records <- function(gedcom){
   
   addr_tags <- c("ADDR","ADR1","ADR2","ADR3","CITY","STAE","POST","CTRY")
     
-  address_rows <- c(tidyged.internals::identify_section(gedcom, 1, "ADDR"),
+  address_rows <- sort(c(tidyged.internals::identify_section(gedcom, 1, "ADDR"),
                     tidyged.internals::identify_section(gedcom, 2, "ADDR"),
-                    tidyged.internals::identify_section(gedcom, 3, "ADDR"))
+                    tidyged.internals::identify_section(gedcom, 3, "ADDR")))
   
   if(length(address_rows) <= 1) return(gedcom)
   
   # Remove rows with no postal address parts
-  address_rows <- address_rows[-which(gedcom$tag[address_rows] == "ADDR" & 
-                                        gedcom$level[address_rows + 1] <= gedcom$level[address_rows])]
+  null_addr_rows <- which(gedcom$tag[address_rows] == "ADDR" & 
+                            gedcom$level[address_rows + 1] <= gedcom$level[address_rows])
+  if(length(null_addr_rows) > 0) address_rows <- address_rows[-null_addr_rows]
   
   # all addresses nested
   orig_addresses <- gedcom %>% 
@@ -207,7 +207,7 @@ create_addr_records <- function(gedcom){
   # unique addresses nested with xrefs
   uniq_addresses <- orig_addresses %>% 
     dplyr::distinct(data) %>% 
-    dplyr::mutate(record = paste0("@A", dplyr::row_number(), "@"))
+    dplyr::mutate(record = paste0("@A", dplyr::row_number(), "@")) #TODO: replace with assign_xref
   
   addr_lookup <- dplyr::left_join(orig_addresses, uniq_addresses, by = "data")
   
@@ -229,7 +229,3 @@ create_addr_records <- function(gedcom){
   gedcom
 }
 
-create_plac_records <- function(gedcom){
-  
-  gedcom
-}

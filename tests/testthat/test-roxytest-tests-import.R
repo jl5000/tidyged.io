@@ -19,7 +19,7 @@ test_that("Function read_gedcom() @ L29", {
 })
 
 
-test_that("Function read_gedcom_encoding() @ L79", {
+test_that("Function read_gedcom_encoding() @ L80", {
   expect_equal(
     read_gedcom_encoding(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
     "UTF-8")
@@ -32,7 +32,7 @@ test_that("Function read_gedcom_encoding() @ L79", {
 })
 
 
-test_that("Function check_line_lengths() @ L104", {
+test_that("Function check_line_lengths() @ L105", {
   expect_error(check_line_lengths(c("the", "quick", "brown", "fox"), 4))
   expect_equal(check_line_lengths(c("the", "quick", "brown", "fox"), 5),
                                   c("the", "quick", "brown", "fox"))

@@ -36,7 +36,7 @@ write_gedcom <- function(gedcom, filepath) {
     warning("Output is not being saved as a GEDCOM file (*.ged)")
   
   gedcom %>%
-    remove_custom_records() %>% 
+    remove_addr_records() %>% 
     update_header_with_filename(filename = basename(filepath)) %>% 
     dplyr::mutate(value = dplyr::if_else(stringr::str_detect(value, tidyged.internals::reg_xref(TRUE)),
                                          value,
@@ -56,10 +56,40 @@ write_gedcom <- function(gedcom, filepath) {
 }
 
 
-remove_custom_records <- function(gedcom){
+#' Remove custom address records
+#' 
+#' This function removes the custom address records from a tidyged object and places
+#' them in the relevant places in the object.
+#'
+#' @param gedcom A tidyged object.
+#'
+#' @return An updated tidyged object with address records moved to the appropriate locations.
+remove_addr_records <- function(gedcom){
   
-  gedcom
+  addr_xrefs <- unique(dplyr::filter(gedcom, tag == "ADDR", 
+                              stringr::str_detect(value, tidyged.internals::reg_xref()))$value)
   
+  if(length(addr_xrefs) == 0) return(gedcom)
+  
+  addr_recs <- dplyr::filter(gedcom, record %in% addr_xrefs)
+  
+  for(i in nrow(gedcom):1){
+    if(gedcom$tag[i] == "ADDR" & stringr::str_detect(gedcom$value[i], tidyged.internals::reg_xref())){
+     
+      addr_rec <- addr_recs %>% 
+        dplyr::filter(record == gedcom$value[i], tag != "ADDR") %>% 
+        dplyr::mutate(record = gedcom$record[i],
+                      level = gedcom$level[i] + 1)
+      
+      gedcom <- gedcom %>% 
+        dplyr::add_row(addr_rec, .after = i)
+      
+      gedcom[i, "value"] <- ""
+       
+    }
+  }
+  
+  dplyr::filter(gedcom, !record %in% addr_xrefs)
 }
 
 #' Update GEDCOM header with filename
