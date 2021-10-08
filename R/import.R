@@ -49,6 +49,7 @@ read_gedcom <- function(filepath = file.choose()) {
     dplyr::mutate(level = as.numeric(level),
                   value = stringr::str_replace_all(value, "@@", "@")) %>% 
     combine_gedcom_values() %>% 
+    combine_spouse_age_lines() %>% 
     capitalise_tags_and_keywords() %>% 
     tidyged.internals::set_class_to_tidyged()
   
@@ -144,6 +145,17 @@ combine_gedcom_values <- function(gedcom) {
   
 }
 
+combine_spouse_age_lines <- function(gedcom){
+  
+  spouse_rows <- which(gedcom$tag %in% c("HUSB","WIFE") & gedcom$value == "")
+  
+  if(length(spouse_rows) == 0) return(gedcom)
+  
+  gedcom$value[spouse_rows] <- gedcom$value[spouse_rows + 1]
+  gedcom$tag[spouse_rows] <- paste0(gedcom$tag[spouse_rows], "_AGE")
+  gedcom <- gedcom[-(spouse_rows+1),]
+  gedcom
+}
 
 capitalise_tags_and_keywords <- function(gedcom){
   

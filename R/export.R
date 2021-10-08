@@ -41,6 +41,7 @@ write_gedcom <- function(gedcom, filepath) {
                                          value,
                                          stringr::str_replace_all(value, "@", "@@"))) %>% 
     split_gedcom_values(char_limit = .pkgenv$gedcom_phys_value_limit) %>% 
+    split_spouse_age_lines() %>% 
     dplyr::mutate(record = dplyr::if_else(dplyr::lag(record) == record, "", record)) %>% 
     dplyr::mutate(record = dplyr::if_else(record == "TR", "", record)) %>% 
     tidyr::replace_na(list(record = "")) %>% #First line
@@ -99,6 +100,25 @@ split_gedcom_values <- function(gedcom, char_limit) {
     create_conc_lines(char_limit) %>% 
     dplyr::bind_rows(header, .)
   
+}
+
+split_spouse_age_lines <- function(gedcom){
+  
+  unique_delim <- "<>delimiter<>"
+  spouse_rows <- which(gedcom$tag %in% c("HUSB_AGE","WIFE_AGE"))
+  
+  if(length(spouse_rows) == 0) return(gedcom)
+  
+  gedcom$tag[spouse_rows] <- stringr::str_remove(gedcom$tag[spouse_rows], "_AGE")
+  gedcom$record[spouse_rows] <- paste(gedcom$record[spouse_rows], gedcom$record[spouse_rows],
+                                      sep = unique_delim)
+  gedcom$level[spouse_rows] <- paste(gedcom$level[spouse_rows], gedcom$level[spouse_rows] + 1,
+                                      sep = unique_delim)
+  gedcom$tag[spouse_rows] <- paste(gedcom$tag[spouse_rows], "AGE", sep = unique_delim)
+  gedcom$value[spouse_rows] <- paste("", gedcom$value[spouse_rows], sep = unique_delim)
+  gedcom %>% 
+    tidyr::separate_rows(dplyr::everything(), sep = unique_delim) %>% 
+    dplyr::mutate(level = as.integer(level))
 }
 
 #' Create CONTinuation lines
