@@ -36,21 +36,22 @@ read_gedcom <- function(filepath = file.choose()) {
   con <- file(filepath, encoding = gedcom_encoding)
   on.exit(close(con))
   
-  ged <- readLines(con) %>% 
-    stringr::str_trim(side = "left") %>% 
-    check_line_lengths(.pkgenv$gedcom_line_length_limit) %>%
-    tibble::tibble(value = .) %>%
+  ged_lines <- readLines(con) |> 
+    stringr::str_trim(side = "left") |> 
+    check_line_lengths(.pkgenv$gedcom_line_length_limit)
+  
+  ged <- tibble::tibble(value = ged_lines) |>
     tidyr::extract(value, into = c("level", "record", "tag", "value"), 
-                   regex = "^(\\d) (@.+@)? ?(\\w{3,5}) ?(.*)$") %>%
+                   regex = "^(\\d) (@.+@)? ?(\\w{3,5}) ?(.*)$") |>
     dplyr::mutate(record = dplyr::if_else(tag == "HEAD", "HD", record),
                   record = dplyr::if_else(tag == "TRLR", "TR", record),
-                  record = dplyr::na_if(record, "")) %>%
-    tidyr::fill(record) %>% 
+                  record = dplyr::na_if(record, "")) |>
+    tidyr::fill(record) |> 
     dplyr::mutate(level = as.numeric(level),
-                  value = stringr::str_replace_all(value, "@@", "@")) %>% 
-    combine_gedcom_values() %>% 
-    combine_spouse_age_lines() %>% 
-    capitalise_tags_and_keywords() %>% 
+                  value = stringr::str_replace_all(value, "@@", "@")) |> 
+    combine_gedcom_values() |> 
+    combine_spouse_age_lines() |> 
+    capitalise_tags_and_keywords() |> 
     tidyged.internals::set_class_to_tidyged()
   
   validate_gedcom(ged, gedcom_encoding)
@@ -127,20 +128,20 @@ combine_gedcom_values <- function(gedcom) {
   
   tags <- c("CONT", "CONC")
   
-  gedcom %>% 
+  gedcom |> 
     dplyr::mutate(value = stringr::str_replace_all(value, "\n\r|\r\n", "\n"),
-                  value = stringr::str_replace_all(value, "\r", "\n")) %>%
-    dplyr::mutate(row = dplyr::row_number()) %>% 
+                  value = stringr::str_replace_all(value, "\r", "\n")) |>
+    dplyr::mutate(row = dplyr::row_number()) |> 
     dplyr::mutate(value = dplyr::if_else(tag == "CONT", paste0("\n", value), value),
                   row = dplyr::if_else(tag %in% tags, NA_integer_, row),
-                  tag = dplyr::if_else(tag %in% tags, NA_character_, tag)) %>%
-    tidyr::fill(tag, row, .direction = "down") %>%
-    dplyr::group_by(record, tag, row) %>% 
+                  tag = dplyr::if_else(tag %in% tags, NA_character_, tag)) |>
+    tidyr::fill(tag, row, .direction = "down") |>
+    dplyr::group_by(record, tag, row) |> 
     dplyr::summarise(level = min(level),
                      value = paste(value, collapse = ""),
-                     .groups = "drop") %>%
-    dplyr::ungroup() %>% 
-    dplyr::arrange(row) %>%
+                     .groups = "drop") |>
+    dplyr::ungroup() |> 
+    dplyr::arrange(row) |>
     dplyr::select(level, record, tag, value)
   
 }
@@ -159,8 +160,8 @@ combine_spouse_age_lines <- function(gedcom){
 
 capitalise_tags_and_keywords <- function(gedcom){
   
-  gedcom %>% 
-    dplyr::mutate(tag = toupper(tag)) %>% 
+  gedcom |> 
+    dplyr::mutate(tag = toupper(tag)) |> 
     dplyr::mutate(value = dplyr::if_else(tag == "SEX", toupper(value), value),
                   value = dplyr::if_else(tag == "PEDI", tolower(value), value),
                   value = dplyr::if_else(tag == "ADOP", toupper(value), value),
@@ -175,7 +176,7 @@ capitalise_tags_and_keywords <- function(gedcom){
                                          toupper(value), value),
                   value = dplyr::if_else(tag == "DATE" &
                                            !stringr::str_detect(value, tidyged.internals::reg_custom_value()),
-                                         stringr::str_remove(value, "@#DGREGORIAN@ "), value)) %>% 
+                                         stringr::str_remove(value, "@#DGREGORIAN@ "), value)) |> 
     dplyr::mutate(tag = dplyr::if_else(tag == "URL", "WWW", tag))
   
   

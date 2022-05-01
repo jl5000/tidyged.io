@@ -1,6 +1,6 @@
 Package: tidyged.io
 Title: Import and Export GEDCOM Files
-Version: 0.4.2.9000
+Version: 0.4.3.9000
 Authors@R: 
     person(given = "Jamie",
            family = "Lendrum",
@@ -15,7 +15,6 @@ Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "roxytest::testtha
 RoxygenNote: 7.1.2
 Imports: 
     dplyr,
-    magrittr,
     tidyr,
     stringr,
     tibble,
