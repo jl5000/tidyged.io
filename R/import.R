@@ -146,6 +146,14 @@ combine_gedcom_values <- function(gedcom) {
   
 }
 
+#' Combine husband/wife age rows into one row
+#' 
+#' This function combines the HUSB and WIFE rows with their subordinate AGE rows in order
+#' to make querying easier.
+#' 
+#' @param gedcom A tidyged object.
+#'
+#' @return A tidyged object with husband/wife and age rows combined accordingly.
 combine_spouse_age_lines <- function(gedcom){
   
   spouse_rows <- which(gedcom$tag %in% c("HUSB","WIFE") & gedcom$value == "")
@@ -158,6 +166,17 @@ combine_spouse_age_lines <- function(gedcom){
   gedcom
 }
 
+
+#' Capitalise tags and certain keywords
+#' 
+#' This function capitalises all tags and certain values such as SEX values and DATE values.
+#' 
+#' @details The function also ensures certain values are lowercase such as PEDI
+#' and ADOP values, and removes explicit GREGORIAN date escape sequences (as they are implied).
+#'
+#' @param gedcom A tidyged object.
+#'
+#' @return A tidyged object with appropriately capitalised tags and keywords.
 capitalise_tags_and_keywords <- function(gedcom){
   
   gedcom |> 

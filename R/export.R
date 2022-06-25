@@ -8,7 +8,7 @@
 #' @param gedcom A tidyged object.
 #' @param filepath The full filepath to write to.
 #'
-#' @return Nothing
+#' @return Nothing.
 #' @export
 #' @tests
 #' expect_warning(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
@@ -22,7 +22,7 @@
 #' )
 #' file.remove("555Sample.ged")
 write_gedcom <- function(gedcom, 
-                         filepath) {
+                         filepath = file.choose()) {
   
   if(file.exists(filepath)) file.remove(filepath)
   
@@ -104,6 +104,14 @@ split_gedcom_values <- function(gedcom, char_limit) {
   
 }
 
+#' Split husband/wife age rows into two rows
+#' 
+#' This function splits the HUSB_AGE and WIFE_AGE tags into two rows in line with the GEDCOM
+#' specification.
+#' 
+#' @param gedcom A tidyged object.
+#'
+#' @return A tidyged object with husband/wife age rows split accordingly.
 split_spouse_age_lines <- function(gedcom){
   
   unique_delim <- "<>delimiter<>"

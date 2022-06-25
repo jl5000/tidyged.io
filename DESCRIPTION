@@ -1,6 +1,6 @@
 Package: tidyged.io
 Title: Import and Export GEDCOM Files
-Version: 0.4.3.9000
+Version: 1.0.0.9000
 Authors@R: 
     person(given = "Jamie",
            family = "Lendrum",
@@ -12,7 +12,7 @@ License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "roxytest::testthat_roclet"))
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Imports: 
     dplyr,
     tidyr,
