@@ -11,7 +11,7 @@
 #' @return Nothing.
 #' @export
 #' @tests
-#' expect_warning(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
+#' expect_error(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
 #'                             "my_family.txt"))
 #'  file.remove("my_family.txt")
 #' expect_identical(
@@ -24,6 +24,9 @@
 write_gedcom <- function(gedcom, 
                          filepath = file.choose()) {
   
+  if(tolower(stringr::str_sub(filepath, -4, -1)) != ".ged")
+    stop("Output is not being saved as a GEDCOM file (*.ged)")
+  
   if(file.exists(filepath)) file.remove(filepath)
   
   con <- file(filepath, encoding = "UTF-8", open = "wb")
@@ -32,9 +35,6 @@ write_gedcom <- function(gedcom,
   
   con <- file(filepath, encoding = "UTF-8", open = "a")
   on.exit(close(con))
-  
-  if(tolower(stringr::str_sub(filepath, -4, -1)) != ".ged")
-    warning("Output is not being saved as a GEDCOM file (*.ged)")
   
   gedcom |>
     update_header_with_filename(filename = basename(filepath)) |> 

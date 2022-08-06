@@ -1,6 +1,6 @@
 Package: tidyged.io
 Title: Import and Export GEDCOM Files
-Version: 1.0.0.9000
+Version: 1.1.0.9000
 Authors@R: 
     person(given = "Jamie",
            family = "Lendrum",

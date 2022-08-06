@@ -3,7 +3,7 @@
 # File R/export.R: @tests
 
 test_that("Function write_gedcom() @ L24", {
-  expect_warning(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
+  expect_error(write_gedcom(read_gedcom(system.file("extdata", "555SAMPLE.GED", package = "tidyged.io")), 
                               "my_family.txt"))
    file.remove("my_family.txt")
   expect_identical(
